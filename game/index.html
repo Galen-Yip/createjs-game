@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="easeljs-0.7.1.min.js"></script>
+<script>
+
+	
+</script>
+</head>
+<body>
+	<canvas id="canvas" width="1000" height="500"></canvas>
+	<button id="pauseBtn" onclick="togglePause()">暂停</button>
+<script>
+		var game = document.getElementById('canvas');
+		var stage = new createjs.Stage(game);
+		/*var circle = new createjs.Shape();
+		circle.graphics.beginFill('red').drawCircle(0, 0, 40);
+		circle.x = circle.y = 50;
+		stage.addChild(circle);
+		stage.update();*/
+
+		var speed = 1;
+		var pic = new createjs.SpriteSheet({
+			'animations':{
+				'run': [0, 25, 'run', 1.5],
+				'jump': [26, 63, 'run']
+			},
+			'images':['sprites.png'],
+			'frames':{
+				'height': 292.5,
+				'width': 165.75,
+				"regX": 0,
+				"regY": 0,
+				'count': 64
+			}
+		});
+
+		var go = new createjs.Sprite(pic, 'run');
+		go.x = 200;
+		go.y = 200;
+
+		stage.addChild(go);
+		createjs.Ticker.setFPS(20);
+
+		createjs.Ticker.addEventListener('tick', tick);
+		function tick(evt){
+			if( !createjs.Ticker.getPaused()){
+				go.x += 3*speed ;
+			}else{
+				go.Stop()
+			}
+			stage.update();
+			speed += .01;
+
+			if(go.x >= 1000){
+				go.x = 0;
+				speed = 1;
+			}
+		}
+
+		function togglePause(){
+			var paused = !createjs.Ticker.getPaused();  
+		    //alert(paused);  
+		    createjs.Ticker.setPaused(paused);  
+		    document.getElementById("pauseBtn").value = paused ? "unpause" : "pause";  
+		}
+	
+		stage.addEventListener("stagemousedown", handleJumpStart);
+		function handleJumpStart(evt){
+		  go.gotoAndPlay("jump");
+		}
+</script>
+</body>
+</html>
